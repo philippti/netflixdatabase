@@ -1,3 +1,5 @@
+# Matrikelnummern: 1005644, 7714518, 1532789
+
 #### Source: https://stackoverflow.com/questions/3094498/how-can-i-check-if-a-python-unicode-string-contains-non-western-letters 
 
 import unicodedata as ud

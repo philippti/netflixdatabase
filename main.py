@@ -1,8 +1,10 @@
+# Matrikelnummern: 1005644, 7714518, 1532789
+
 import data_cleaning
 import pymongo
 import pandas as pd
 import collections
-
+import tkinter as tk
 
 class SearchQuery():
 
@@ -10,16 +12,10 @@ class SearchQuery():
     
 
 
-
-
-
-
-
-
 if __name__ == "__main__":
+    # data_cleaning()
 
-    in_data_path = "./data/netflix_titles_cleaned.csv"
-    data = pd.read_csv(in_data_path, delimiter=",", index_col="show_id")
+    data = pd.read_csv(data_cleaning.out_data_path, delimiter=",")
 
     d = data.to_dict(orient="index")
        
@@ -28,12 +24,10 @@ if __name__ == "__main__":
     mydb = myclient["Netflix_Titles"]
     mycol = mydb["Title_Database"]
 
-    for k, v in d.items():
-        mycol.insert_one({k: v})
+    # print(d.items())
+    # for v in d.values():
+    #     mycol.insert_one(v)
 
-
-    # # data_cleaning()
-
-
-    # print(d['s1'])
-
+    # print(mycol.find_one({"title":"42 Grams"}))
+    for posts in mycol.find({"director": "Steven Spielberg"}):
+        print(posts["title"])

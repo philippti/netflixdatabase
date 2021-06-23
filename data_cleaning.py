@@ -1,23 +1,33 @@
-
+# Matrikelnummern: 1005644, 7714518, 1532789
+import collections
 import pandas as pd
 import omdb
 import json
+from datetime import datetime as dt
 
 
 in_data_path = "./data/netflix_titles.csv"
 out_data_path = "./data/netflix_titles_cleaned.csv"
 
+# Remove all leading and trailing spaces in all string columns
+data = pd.read_csv(in_data_path, delimiter=",", index_col="show_id")
+for columns in data:
+    if columns != "release_year":
+        data[columns] = data[columns].str.lstrip()
+        data[columns] = data[columns].str.rstrip()
 
-# data = pd.read_csv(in_data_path, delimiter=",", index_col="show_id")
-clean_dataFrame = pd.read_csv(out_data_path, delimiter=",", index_col="show_id")
+# convert "date_added" to datetime 
+data["date_added"] = pd.to_datetime(data["date_added"], format="%B %d, %Y")
 
-# nones = clean_dataFrame[clean_dataFrame.isna().any(axis=1)]
-# print(nones)
-print(clean_dataFrame.isna().sum()) #identify the columns with missing data
+# clean_dataFrame = pd.read_csv(out_data_path, delimiter=",", index_col="show_id")
 
-columns_with_missing_values = ["director", "cast", "country", "rating"]
+# # nones = clean_dataFrame[clean_dataFrame.isna().any(axis=1)]
+# # print(nones)
+# # print(clean_dataFrame.isna().sum()) #identify the columns with missing data
 
-# get all id's of movies with missing data and save them in a set 
+# columns_with_missing_values = ["director", "cast", "country", "rating"]
+
+# # get all id's of movies with missing data and save them in a set 
 
 # movie_id_missing_values = list()
 
