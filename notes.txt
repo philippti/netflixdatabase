@@ -1,0 +1,21 @@
+Type the numbers for selecting the menues:
+
+1) Search
+
+Recommendations:
+
+2) Rec 1, 3) Rec2 ... 
+
+
+ ---  Nutzer drückt 1:
+
+
+123 - movie, director, release year
+
+
+
+
+plan: 
+
+
+
