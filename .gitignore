@@ -11,7 +11,7 @@
 .history/
 
 # ignore api file
-.api_key.json
+api_key.json
 
 __pycache__/
 *.py[cod]
