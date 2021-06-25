@@ -1,7 +1,7 @@
 # Byte-compiled / optimized / DLL files
 
 .vscode/*
-!.vscode/settings.json
+# !.vscode/settings.json
 !.vscode/tasks.json
 !.vscode/launch.json
 !.vscode/extensions.json
@@ -10,6 +10,8 @@
 # Local History for Visual Studio Code
 .history/
 
+# ignore api file
+.api_key.json
 
 __pycache__/
 *.py[cod]

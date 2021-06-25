@@ -1,7 +1,8 @@
 # Matrikelnummern: 1005644, 7714518, 1532789
 
 import json
-import data_cleaning
+from re import search
+# import data_cleaning
 import pymongo
 import pandas as pd
 class SearchQuery():
@@ -13,8 +14,8 @@ class SearchQuery():
     DATABASE = CLIENT["Netflix_Titles"]
     COLUMN = DATABASE["Title_Database"]
 
-    query_history = []
-    user_exit = 0
+    __query_history = []
+    __user_exit = 0
 
     dialog_dict ={  1: {"message": "\nName of the title: ", "column": "title"},
                     2: {"message": "\nWhat type you want to search, movie or TV show: ", "column": "type"},
@@ -22,7 +23,7 @@ class SearchQuery():
                     4: {"message": "\nActress or actor: ", "column": "cast"},
                     5: {"message": "\nCountry: ", "column": "country"}, 
                     6: {"message": "\nRelease year: ", "column": "release_year"},
-                    7: {"message": "\nRating: ", "column": "rated"},
+                    7: {"message": "\nRating: ", "column": "rating"},
                     8: {"message": "\nGenre: ", "column": "listed_in"},
                     }
 
@@ -36,19 +37,51 @@ class SearchQuery():
         6) Release period
         7) Rating
         8) Genre
+
+        0) exit
+
     """
 
     def __init__(self):
+        # print(self.search_options_string)
+
+        if len(self.getQueryHistory()) !=0:
+            for dict in SearchQuery.getQueryHistory(self):
+                self.bla = f"{dict}\n"
+        self.query_dict = {}
+        self.query_code = ""
+
         print(self.search_options_string)
 
-        self.query_dict = {}
-        self.query_code = input("\nWhich filter do you want to use? Type in the numbers (eg. 245): ")
-        
-        self.getQueryCode()
-        
-        self.getTitle()
+        if len(self.getQueryHistory()):
+            print("Search History")
+            print(self.searchHistoryString())
 
-        SearchQuery.query_history.append(self)
+        
+    def getQueryHistory(self):
+        return SearchQuery.__query_history
+    
+    def searchHistoryString(self):
+        history_string = ""
+        for num, search_dicts in enumerate(self.getQueryHistory()):
+            if num == (len(self.getQueryHistory()) - 3) or num <= 3:
+                history_string += f"{num+1}. \n"
+                cache_string = ""
+                for k, v in search_dicts.items():
+                    cache_string += f"{k} : {v} \n" 
+                history_string += cache_string + "\n"
+            else:
+                pass
+        return history_string 
+
+    def getQueryDict(self):
+        return self.query_dict
+        
+    def getUserExit(self):
+        return self.__user_exit
+    
+    def setUserExit(self):
+        self.__user_exit = 1
 
     def getTitle(self):
         result = self.COLUMN.find(self.query_dict)
@@ -75,9 +108,24 @@ class SearchQuery():
                     continue
                 else:
                     break
+                
 
     def getQueryCode(self):
-         for i in self.query_code:
+        search_summary = {}
+        self.query_code = input("\nWhich filter(s) do you want to use? Type in the numbers (eg. 245): ")
+        if not self.query_code.isnumeric():
+            print("Please enter only numbers")
+            self.getQueryCode()
+
+        if "0" in self.query_code and len(self.query_code) > 1:
+            print("Can't search and exit at the same time!")
+            self.getQueryCode()
+        
+        if "0" in self.query_code and len(self.query_code) == 1:
+            self.exitApplication()
+
+        for i in self.query_code:
+            
             i = int(i)
             if 6 == i:
 
@@ -87,22 +135,44 @@ class SearchQuery():
                     upper_date = int(input("To: "))
                     time_frame = {'$gt': lower_date, '$lt': upper_date}
 
+                    search_summary.update({self.dialog_dict[i]["column"]: f'{lower_date} "-" {upper_date}'})
+
                 elif choice == "y":
                     time_frame = int(input("Release year: "))
+                    search_summary.update({self.dialog_dict[i]["column"]: time_frame})
 
                 else:
                     print("Wrong Input")
                     exit() 
 
                 self.query_dict.update({"release_year": time_frame})
-
+                
             else:
-                self.query_dict.update({self.dialog_dict[i]["column"] : {'$regex':input(self.dialog_dict[i]["message"]), '$options':'i'}})
+                filter_input = input(self.dialog_dict[i]["message"])
+                self.query_dict.update(
+                    {self.dialog_dict[i]["column"] : {'$regex':filter_input, '$options':'i'}}
+                    )
+                search_summary.update({self.dialog_dict[i]["column"]: filter_input})
+
+        SearchQuery.__query_history.append(search_summary) 
+          
+    def run_application(self):
+        
+        self.getQueryCode()
+        
+        self.getTitle()
+
+    def exitApplication(self):
+        self.setUserExit()
+        print("Thank you for using our Netflix Database")
+        print("Exiting program...")
+        exit()
+
 
 
 def initializeDatabase():
-    semaphore = "./semaphor_database.json"
-    f = open(semaphore, "r")
+    flags = "./flags.json"
+    f = open(flags, "r")
     json_init = json.load(f)
     f.close()
 
@@ -119,7 +189,7 @@ def initializeDatabase():
         print("Database initialized")
 
         json_init["INITIALIZED"] = 1
-        f = open(semaphore, "w")
+        f = open(flags, "w")
         json.dump(json_init, f, indent=4)
         f.close()
 
@@ -129,16 +199,22 @@ def initializeDatabase():
 if __name__ == "__main__":
 
     # data_cleaning()
-    # initializeDatabase()
+    initializeDatabase()
+    query = SearchQuery()
 
-    while SearchQuery.user_exit == 0:
-        query = SearchQuery()
+
+
+       
+    while query.getUserExit() == 0:
+        if len(query.getQueryHistory()) != 0:
+            query = SearchQuery()
+        query.run_application()
         new_search = input("New search (y/n)? ")
         
         if new_search == "y":
             continue
         else:
-            print("Thank you for using our Netflix Database")
-            print("Exiting program...")
-            exit()
+           query.exitApplication()
+        
+    # print(query.getQueryHistory())
 
