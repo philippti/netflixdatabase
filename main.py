@@ -43,11 +43,7 @@ class SearchQuery():
     """
 
     def __init__(self):
-        # print(self.search_options_string)
 
-        if len(self.getQueryHistory()) !=0:
-            for dict in SearchQuery.getQueryHistory(self):
-                self.bla = f"{dict}\n"
         self.query_dict = {}
         self.query_code = ""
 
