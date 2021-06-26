@@ -39,8 +39,10 @@ data["date_added"] = pd.to_datetime(data["date_added"], format="%B %d, %Y")
 
 clean_dataFrame = pd.read_csv(out_data_path, delimiter=",", index_col="show_id")
 
+# check where and how many NaN Values exist in the DataFrame
 # nones = clean_dataFrame[clean_dataFrame.isna().any(axis=1)]
 # print(nones)
+
 # print(clean_dataFrame.isna().sum()) #identify the columns with missing data
 
 columns_with_missing_values = ["director", "cast", "country", "rating"]

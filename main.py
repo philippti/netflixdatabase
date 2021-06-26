@@ -194,7 +194,7 @@ class SearchQuery():
         self.setUserExit()
         print("Thank you for using our Netflix Database")
         print("Exiting program...")
-        exit()
+   
 
 
 # Initialize Database with cleaned data from 'netflix_titles_cleaned.csv'.
