@@ -20,6 +20,7 @@ import json
 in_data_path = "./data/netflix_titles.csv"
 out_data_path = "./data/netflix_titles_cleaned.csv"
 
+# read API key from not published api_key.json
 api_key_file = "./api_key.json"
 f = open(api_key_file, "r")
 api_json = json.load(f)

@@ -1,6 +1,7 @@
 """
 Matrikelnummern: 1005644, 7714518, 1532789
 """
+
 import os
 import json
 # import data_cleaning     # commented out since it would take a lot of time to finish, clean data is provided.
@@ -40,7 +41,7 @@ class SearchQuery():
   /  |/ // _ \ / __// /_ / // /| |/_/  / / / // __ `// __// __ `// __ \ / __ `// ___// _ \\
  / /|  //  __// /_ / __// // /_>  <   / /_/ // /_/ // /_ / /_/ // /_/ // /_/ /(__  )/  __/
 /_/ |_/ \___/ \__//_/  /_//_//_/|_|  /_____/ \__,_/ \__/ \__,_//_.___/ \__,_//____/ \___/ 
-                                                                by Shara, Timo and Andi
+
     
     Search options:
         1) Title name
@@ -142,6 +143,8 @@ class SearchQuery():
             else:
                 filter_input = input(self.dialog_dict[i]["message"])
                 # add filter to the whole search query
+                # since we use "$regex" for a search in MongoDB we search for a pattern. This means, that substrings
+                # can be found as well as exact hits. the "$option" with "i" also provides case insensitivity
                 self.query_dict.update(
                     {self.dialog_dict[i]["column"] : {'$regex':filter_input, '$options':'i'}}
                     )
@@ -233,7 +236,7 @@ if __name__ == "__main__":
     # data_cleaning is commented out here as well as in the import. The cleaning with omdb
     # takes a long time and the cleaned csv is provided.
     # data_cleaning()
-    
+
     initializeDatabase()
     query = SearchQuery()
 
