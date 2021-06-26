@@ -1,10 +1,13 @@
-# Matrikelnummern: 1005644, 7714518, 1532789
+"""
+Matrikelnummern: 1005644, 7714518, 1532789
+"""
 
 import json
 from re import search
 # import data_cleaning
 import pymongo
 import pandas as pd
+
 class SearchQuery():
 
     # search for: Movie/TV-Show, Actor, Country, Director, Genres, recently added (newest 10), rating, release year,...

@@ -1,9 +1,20 @@
-# Matrikelnummern: 1005644, 7714518, 1532789
-import collections
+""" 
+Matrikelnummern: 1005644, 7714518, 1532789
+
+This script will read the "netflix_titles.csv" and perform various tasks to clean the given data.
+Those are:  1) Remove all leading and trailing spaces in all columns with string values
+            2) Convert a column with dates to datetime format
+            3) In columns with missing values, we checked against the Open Movie Database to fill in missing values
+            if the OMDB has the data
+            4) Save the cleaned and completed data as "netflix_titles_cleaned.csv"
+
+The cleaned data is further used in "main.py" 
+"""
+
 import pandas as pd
 import omdb
 import json
-from datetime import datetime as dt
+
 
 
 in_data_path = "./data/netflix_titles.csv"
@@ -76,7 +87,7 @@ for title_id in movie_id_missing_values_set:
                 if omdb_request[key_dictionary[k]] == "N/A":    # replace N/A with "not available" to check if no nan values are left in the DataFrame 
                     data.at[title_id,k] = 'not available'
                 else:
-                    data.at[title_id,k] = omdb_request[key_dictionary[k]]
+                    data.at[title_id,k] = omdb_request[key_dictionary[k]]  
                 if data.loc[title_id]["type"] == "TV Show" and omdb_request["Director"] == 'not available': # TV-Shows with multiple directors in the series are "N/A" in the OMDB, so here we use "Various Directors"
                     data.at[title_id,"director"] = "Various Directors"
             

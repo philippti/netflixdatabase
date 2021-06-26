@@ -1,6 +1,14 @@
-# Matrikelnummern: 1005644, 7714518, 1532789
+""" 
+Matrikelnummern: 1005644, 7714518, 1532789
 
-#### Source: https://stackoverflow.com/questions/3094498/how-can-i-check-if-a-python-unicode-string-contains-non-western-letters 
+We used this script to identify titles in the database which were written in non roman characters.
+Since there were only a handful of such titles, we searched in Google for them manually and replaced
+their titles by hand. This helped to find these titles in the OMDB and fill in missing data.
+
+Source: https://stackoverflow.com/questions/3094498/how-can-i-check-if-a-python-unicode-string-contains-non-western-letters 
+
+""" 
+
 
 import unicodedata as ud
 import pandas as pd
