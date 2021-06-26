@@ -109,6 +109,7 @@ class SearchQuery():
         # zero as only input ends the program
         if "0" in self.query_code and len(self.query_code) == 1:
             self.exitApplication()
+            exit()
 
         # throw out duplicates since all search terms can be given at once per search category
         self.query_code = set(self.query_code)
@@ -127,8 +128,10 @@ class SearchQuery():
                     lower_date = int(input("From: "))
                     upper_date = int(input("To: "))
                     time_frame = {'$gte': lower_date, '$lte': upper_date}
+                    if lower_date > upper_date:
+                        lower_date, upper_date = upper_date, lower_date
                     # add filter to the whole search query
-                    search_summary.update({self.dialog_dict[i]["column"]: f'{lower_date} "-" {upper_date}'}) 
+                    search_summary.update({self.dialog_dict[i]["column"]: f'{lower_date} - {upper_date}'}) 
 
                 elif choice == "y":
                     time_frame = int(input("Release year: "))
@@ -136,7 +139,7 @@ class SearchQuery():
 
                 else:
                     print("Wrong Input")
-                    exit() 
+                    exit()
                 # add filter to the whole search query
                 self.query_dict.update({"release_year": time_frame}) 
                 
@@ -150,7 +153,7 @@ class SearchQuery():
                     )
                 search_summary.update({self.dialog_dict[i]["column"]: filter_input})
 
-        SearchQuery.__query_history.append(search_summary) 
+        SearchQuery.__query_history.append(search_summary)
 
     # getTitles() will conduct the search in the Database and return all found Titles in chunks of 10
     # if there are more than 10 Titles.
