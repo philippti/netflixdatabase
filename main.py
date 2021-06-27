@@ -77,10 +77,12 @@ class SearchQuery():
     def searchHistoryString(self):
         history_string = ""
         # get the last three searches from the __query_history class variable
-        for search_dicts in self.getQueryHistory()[-3:]: 
+        for num, search_dicts in enumerate(self.getQueryHistory()[-3:]): 
+                history_string += f"{num+1}. \n"
                 for k, v in search_dicts.items():
-                    history_string += f"{k} : {v} \n"
-        return history_string 
+                    history_string += f"{k} : {v}\n"
+                history_string += "\n"
+        return history_string
 
     def getQueryDict(self):
         return self.query_dict
@@ -238,6 +240,7 @@ if __name__ == "__main__":
 
     # data_cleaning is commented out here as well as in the import. The cleaning with omdb
     # takes a long time and the cleaned csv is provided.
+    
     # data_cleaning()
 
     initializeDatabase()

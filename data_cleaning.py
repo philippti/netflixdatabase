@@ -79,7 +79,7 @@ for title_id in movie_id_missing_values_set:
     if omdb_title_data_with_year_json['Response'] == 'True':
         omdb_request = omdb_title_data_with_year_json
     else:
-        omdb_title_data_without_year = omdb.request(t=title_name, apikey="f1aa0340")
+        omdb_title_data_without_year = omdb.request(t=title_name, apikey=api_key)
         omdb_request = json.loads(omdb_title_data_without_year.text)
 
     movie_title = dict(data.loc[title_id])
